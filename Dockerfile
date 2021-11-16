@@ -19,4 +19,4 @@ COPY start.sh /opt/start
 RUN echo "* 3 */3 * * root /opt/certbot/renew.sh" > /etc/cron.d/certbotRenew
 
 # see `start.sh` for commented start up script
-CMD /opt/start/start.sh
+CMD ["/opt/start/start.sh"]
