@@ -15,7 +15,7 @@ This container has been created to solve the 'chicken and egg' problem with Cert
 To use this container you must:
 
 - Provide the EMAIL and HOST environment variables which will be used by certbot to provision the cert
-- Mount your nginx configs into `/etc/nginx/nginx.conf
+- Mount your nginx configs into `/etc/nginx/nginx.conf`
 - The configs must accept the challenge for renewing the cert on port 80
 
 Compose example:

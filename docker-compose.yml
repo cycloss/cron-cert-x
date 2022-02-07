@@ -1,27 +1,29 @@
 version: "3.9"
 
+# define a template
+x-croncertx:
+  &default-croncertx
+  build: .
+  depends_on:
+    - "auth-server"
+    - "support-server"
+    - "accounts-server"
+  # restart: unless-stopped 
+  # mount the nginx config for the back end
+  # mount lets encrypt so certs doesn't get lost if the container stops
+  volumes:
+    - ./nginx:/etc/nginx/conf.d
+    - ./certbot/certs:/etc/letsencrypt
+    - ./certbot/logs:/var/log/letsencrypt
+  env_file: .env
+  ports:
+    - 80:80
+    - 443:443
+  image: cycloss/croncertx:latest
+
 services:
-
-  # dependencies: croncertx -> non-auth microservies -> auth service -> authdb
-  # croncertx will be the last to run and will perform the cert provisioning
-  # and then start the server with a cron job running to renew the cert
-
+  # Use template
+  croncertx-latest: *default-croncertx
   croncertx:
-    build: .
-    depends_on:
-      - "auth-server"  
-      - "support-server"  
-      - "accounts-server"   
-    # restart: unless-stopped 
-    # mount the nginx config for the back end
-    # mount lets encrypt so certs doesn't get lost if the container stops
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
-      - ./certbot/certs:/etc/letsencrypt
-      - ./certbot/logs:/var/log/letsencrypt
-    environment:
-      - EMAIL=edward.lucas-rowe@wessexinternet.net
-      - HOST=mobile-proxy.wessexinternet.net
-    ports:
-      - 80:80
-      - 443:443
+    <<: *default-croncertx
+    image: cycloss/croncertx:$VERSION
