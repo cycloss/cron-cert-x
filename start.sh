@@ -1,12 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 
 # run first time cert in standalone mode
 # MUST have injected EMAIL and HOST into the environment
 certfile = '/etc/letsencrypt/live/mobile-proxy.wessexinternet.net/cert.pem'
 
 # if file doesn't exist, will also go to the else condition
-if openssl x509 -checkend 86400 -noout -in $certfile ; do
-          echo "Certificate is good for another day!"
+if openssl x509 -checkend 86400 -noout -in $certfile
+then
+        echo "Certificate is good for another day!"
 else
         echo "Certificate has expired, or will do so within 24 hours!"
         echo "Renewing certificate"
